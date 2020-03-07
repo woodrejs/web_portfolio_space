@@ -1,0 +1,690 @@
+@import '_mixins';
+@import '_variables';
+@import '_keyframes';
+
+html
+{
+    scroll-behavior: smooth;
+    @include fluid-type($min_width, $max_width, $min_font, $max_font);
+     //SCROLL
+     &::-webkit-scrollbar {
+        width: 1rem;
+    }
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    }
+}
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: 'Open Sans','sans-serif';
+    background-color: $second;
+}
+* { 
+    outline: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+    -moz-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+section{
+    height: 100vh;
+    overflow: hidden;
+}
+//canvas
+#canvasBck{
+    position: fixed;
+    top: 0;
+    z-index: -1;
+    background-color: $second;
+}
+//hero
+#hero{
+    @include flex(column,stretch,stretch);
+    background-image: url('../image/orbits.svg');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#topBar{
+    flex: 1;
+    @include flex(row,space-between,center);
+    #menu{
+        z-index: 100;
+        width: 40vw;
+        ul{
+            @include flex(row,space-between,center);
+        }
+        a{
+            text-decoration: none;
+            list-style: none;
+            color: $first;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        a:hover{
+            text-shadow: 0px 0px 20px white;
+            color: white;
+        }
+    }
+    #social{
+        //flex: 6;
+        width: 60vw;
+        @include flex(row,flex-end,center);
+        img{
+            height: 2rem;
+            margin-right: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        img:hover{
+            transform: scale(1.3);
+        }
+    }
+}
+#name{
+    flex: 9;
+    @include flex(column,stretch,center);
+    & >:nth-child(1){
+        flex: 5;
+        @include flex(column,flex-end,stretch);
+        span{
+            color: $first;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        & >:nth-child(1){
+            font-size: 5rem;
+            line-height: 5rem;
+        }
+        & >:nth-child(2){
+            font-size: 2.6rem;
+        }
+    }
+    & >:nth-child(2){
+        flex: 1;
+    }
+    & >:nth-child(3){
+        flex: 5;
+        span{
+            color: $fourth;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+        div{
+            @include flex(column,stretch,stretch);
+            margin-top: 1rem;
+        }
+        img{
+            height: 1rem;
+        }
+    }
+    #arrowContainer{
+        cursor: pointer;
+         >:nth-child(1){
+             animation: wave 2s infinite linear;
+         }
+         >:nth-child(2){
+            animation: wave 2s 0.1s infinite linear;
+         }
+         >:nth-child(3){
+            animation: wave 2s 0.2s infinite linear;
+         }
+    }
+}
+#hamburger{
+    z-index: 100;
+    border-radius: 50%;
+    margin-left: 1.5rem;
+    background-color: $fourth;
+    height: 3.5rem;
+    width: 3.5rem;
+    cursor: pointer;
+    @include flex(column,center,center);
+    transition: 0.4s;
+    &>div{
+        height: 60%;
+        width: 60%;
+        position: relative;
+        @include flex(column,center,center);
+        &>div{
+            border-bottom: 2px solid $second;
+            width: 90%;
+            position: absolute;
+            transition: 0.4s;
+        }
+        &>:nth-child(1){
+            transform: translateY(0.5rem);
+        }
+        &>:nth-child(3){
+            transform: translateY(-0.5rem);
+        }
+    }
+}
+.toggleHamburger{
+    background-color: $first!important;
+    transform: translateX(8vw);
+    &>div{
+        &>div{
+            border-bottom: 1px solid $second!important;
+        }
+        &>:nth-child(1){
+            transform: rotateZ(45deg)!important;
+        }
+        &>:nth-child(2){
+            display: none;
+        }
+        &>:nth-child(3){
+            transform: rotateZ(-45deg)!important;
+        }
+    }
+}
+//about
+#about{
+    @include flex(row,stretch,stretch);
+    & >:nth-child(1){
+        flex: 2;
+    }
+    & >:nth-child(2){
+        flex: 6;
+    }
+    & >:nth-child(3){
+        flex: 2;
+    }
+}
+#technologies{
+    @include flex(column,flex-end,center);
+    img{
+        width: 60%;
+        margin-bottom: 1.5rem;
+    }
+}
+#aboutSphere{
+    @include flex(column,center,center);
+    & >div{
+        width: 80%;
+        height: 80vh;
+    }
+    .botLayer{
+        @include sphereGradient($third,$second,0%,70%);
+    }
+    .topLayer{
+        @include sphereGradient($third,$second,0%,100%);
+    }
+    .moon{
+        animation: aroundOrbit 30s infinite linear;
+        .sphere{
+            height: 3vh;
+            width: 3vh;
+        }
+        .botLayer{
+            @include sphereGradient($first,$second,0%,70%);
+        }
+        .topLayer{
+            @include sphereGradient($first,$second,0%,100%);
+        }
+    }
+    .content{
+        width: 35vh;
+        height: 30vh;
+        & >:nth-child(1){
+            font-size: 1.2rem;
+        }
+        & >:nth-child(2){
+            font-size: 0.8rem;
+        }
+    }
+}
+//projects
+#projects{
+    @include flex(column,stretch,stretch);
+    & >:nth-child(1){
+        flex: 1;
+    }
+    & >:nth-child(2){
+        flex: 5;
+    }
+    & >:nth-child(3){
+        flex: 1;
+    }
+    &:hover{
+        #slider{
+            //animation: horizontalMove 2s 2s linear;
+        }
+    }
+}
+#sliderContainer{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#slider{
+    --firstColor: #0FA697;
+    transition: 0.5s;
+    @include flex(row,flex-start,center);
+    & >div{
+        flex: 1;
+    }
+    .slides{
+        @include flex(column,center,center); 
+    }
+    .sphere{
+        height: 25vw;
+        width: 25vw;
+        cursor: grab;
+    }
+    .botLayer{
+        @include sphereGradient(var(--firstColor),$second,0%,70%);
+    }
+    .topLayer{
+        @include sphereGradient(var(--firstColor),$second,0%,100%);
+    }
+    .content{
+        height: 12vw;
+        width: 20vw;
+        cursor: grab;
+        &>*{
+            margin-bottom: 0.2rem;
+        }
+        &>:nth-child(1){
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+        &>:nth-child(2){
+            @include flex(row,stretch,center); 
+            img{
+                height: 1rem;
+                margin-right: 0.2rem;
+            }
+        }
+        &>:nth-child(3){
+            font-size: 0.7rem;
+        }
+    }
+    .btnsContainer{
+        @include flex(row,center,center);
+        a{
+            height: 1.3rem;
+            width: 1.3rem;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0 0.5rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        a:hover{
+            transform: scale(1.3);
+        }
+        & :nth-child(1){
+         background-image: url('../icons/gitHub_black_icon.svg'); 
+        }
+        & :nth-child(2){
+            background-image: url('../icons/web_icon.svg');  
+        }
+    }
+}
+//contact
+#contact{
+    @include flex(row,stretch,stretch);
+    & >:nth-child(1){
+        flex: 2;
+    }
+    & >:nth-child(2){
+        flex: 6;
+    }
+    & >:nth-child(3){
+        flex: 2;
+    }
+}
+#cvSphere{
+    @include flex(column,flex-end,flex-start);
+    &>div{
+        width: 12vh;
+        height: 12vh;
+        margin-bottom: 1.5rem;
+        margin-left: 1.5rem;
+    }
+    .sphere{
+        width: 12vh;
+        height: 12vh;
+    }
+    .botLayer{
+        @include sphereGradient($fourth,$second,0%,70%);
+    }
+    .topLayer{
+        @include sphereGradient($fourth,$second,0%,100%);
+    }
+    #cv{
+        z-index: 10;
+        img{
+            @include flex(row,center,center);
+            height: 3rem;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+        img:hover{
+            opacity: 1;
+        }
+    }
+}
+#contactSphere{
+    @include flex(column,center,center);
+    & >div{
+        width: 80%;
+        height: 80vh;
+    }
+    .botLayer{
+        @include sphereGradient($first,$second,0%,70%);
+    }
+    .topLayer{
+        @include sphereGradient($first,$second,0%,100%);
+    }
+    .moon{
+        animation: aroundOrbit 30s infinite linear;
+        .sphere{
+            height: 3vh;
+            width: 3vh;
+        }
+        .botLayer{
+            @include sphereGradient($fourth,$second,0%,70%);
+        }
+        .topLayer{
+            @include sphereGradient($fourth,$second,0%,100%);
+        }
+    }
+    .moon2{
+        animation: aroundOrbit 40s  infinite linear reverse;
+        .sphere{
+            height: 3vh;
+            width: 3vh;
+        }
+        .botLayer{
+            @include sphereGradient($third,$second,0%,70%);
+        }
+        .topLayer{
+            @include sphereGradient($third,$second,0%,100%);
+        }
+    }
+    .content{
+        width: 40vh;
+        height: 40vh;
+        font-size: 0.9rem;
+    }
+}
+//asideMenu
+#asideMenu{
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 100vw;
+    background-color: rgba(225, 224, 222, 0.4);
+    transition: 0.4s;
+    z-index: 99;
+    aside{
+        width: 25vw;
+        height: 100%;
+        background-color: $first;
+        &>:nth-child(1){
+            height: 12%;
+            @include flex(row,flex-end,flex-start);
+            &>div{
+                padding: 2.5rem;
+                font-size: 1.3rem;
+                color: $second;
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
+        &>:nth-child(2){
+            height: 70%;
+        }
+    }
+    ul{
+        margin: 0;
+        padding: 0;
+        @include flex(column,center,stretch);
+    }
+    a{
+        @include flex(column,center,center);
+        flex: 1;
+        text-decoration: none;
+        list-style: none;
+        color: $second;
+        text-transform: uppercase;
+        font-size: 1rem;
+        letter-spacing: 0.8px;
+        text-align: center;
+    }
+}
+.showAsideMenu{
+    transform: translateX(100vw);
+}
+//right bottom menu 
+#sphereMenu{
+    height: 15vh;
+    min-height: 60px;
+    @include flex(column,space-between,center);
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+}
+.sphereMenuItem{
+    background-color: $first;
+    border-radius: 50%;
+    height: 1rem;
+    width: 1rem;
+    opacity: 0.8;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover{
+        opacity: 1;
+    }
+}
+.activeItem{
+    background-color: $third;
+}
+//sphere
+.sphereContainer{
+    position: relative;
+    @include flex(column,center,center);
+}
+.topLayer{
+    opacity: 0.5;
+}
+.sphere{
+    position: absolute;
+    width: 50vh;
+    height: 50vh;
+    border-radius: 50%;
+}
+.moon{
+    @include flex(column,flex-start,center);
+    border: none;
+    position: absolute;
+    border-radius: 50%;
+    width: 58vh;
+    height: 58vh;
+    & >:nth-child(1){
+        width: 3vh;
+        height: 3vh;
+        margin-top: -1.5vh;
+        border-radius: 50%;
+    }
+}
+.moon2{
+    @include flex(column,flex-end,center);
+    width: 66vh;
+    height: 66vh;
+    & >:nth-child(1){
+        margin-bottom: -1.5vh;
+    }
+}
+.orbit{
+    border: 1px dashed $first;
+    animation: none!important;
+}
+.content{
+    z-index: 98;
+    @include flex(column,center,stretch);
+}
+.activeSphere{
+    --firstColor: #E1E0DE;
+}
+//portrait
+@media (min-width: 320px) and (orientation: portrait){
+    html{
+        @include fluid-type(320px, 1920px, 8px, 22px);
+    }
+    #projects{
+        &:hover{
+            #slider{
+                //animation: verticalMove 2s 2s linear;
+            }
+        }
+    }
+}
+@media (max-width: 768px) and (orientation: portrait){
+    #hamburger{
+        display: flex;
+    }
+    #menu{
+        display: none;
+    }
+    #about{
+        @include flex(column,stretch,stretch);
+        & >:nth-child(1){
+            order: 3;
+            flex: 1;
+        }
+        & >:nth-child(2){
+            order: 2;
+        }
+        & >:nth-child(3){
+            flex: 1;
+            order: 1;
+        }
+        .sphere{
+            width: 60vw;
+            height: 60vw;
+        }
+        .moon{
+            width: 70vw;
+            height: 70vw;
+        }
+        .content{
+            width: 45vw;
+            height: 40vw;
+        }
+    }
+    #technologies{
+        @include flex(column,flex-end,flex-start);
+        img{
+            width: 28%;
+            margin-left: 1.5rem;
+        }
+    }
+    #projects{
+        @include flex(row,stretch,stretch);
+    }
+    #slider{
+        @include flex(column,stretch,stretch);
+        .slides{
+            @include flex(column,center,center); 
+        }
+        .sphere{
+            height: 30vh;
+            width: 30vh;
+        }
+        .content{
+            height: 22vh;
+            width: 22vh;
+        }
+        
+    }
+    #contact{
+        @include flex(column,stretch,stretch);
+        & >:nth-child(1){
+            order: 3;
+        }
+        & >:nth-child(2){
+            order: 2;
+        }
+        & >:nth-child(3){
+            flex: 0;
+            order: 1;
+        }
+    }
+    #contactSphere{
+        .sphere{
+            width: 60vw;
+            height: 60vw;
+        }
+        .moon{
+            width: 70vw;
+            height: 70vw;
+        }
+        .moon2{
+            width: 80vw;
+            height: 80vw;
+        }
+        .content{
+            width: 50vw;
+            height: 50vw;
+        }
+    }
+    #cvSphere{
+        @include flex(column,flex-end,flex-start);
+        &>div{
+            width: 10vh;
+            height: 10vh;
+        }
+        .sphere{
+            width: 10vh;
+            height: 10vh;
+        }
+        img{
+            height: 7vh;
+        }
+    }
+}
+//landscape
+@media (min-width: 320px) and (orientation: landscape){
+    #hamburger{
+        display: flex;
+    }
+    #menu{
+        display: none;
+    }
+    #cvSphere{
+        img{
+            height: 3.5rem;
+        }
+    }
+    #slider{
+        .content{
+            height: 22vw;
+            width: 22vw;
+        }
+    }
+}
+@media (min-width: 801px)and (orientation: landscape){
+    #hamburger{
+        display: none;
+    }
+    #menu{
+        display: block;
+    }
+}
+*{
+    //border: 1px solid green;
+}
