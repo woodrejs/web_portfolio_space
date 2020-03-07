@@ -1,32 +1,27 @@
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
 window.onload = function(){
 //SET CLONES
-    let slides = document.querySelectorAll('.slides');
+    const initSlides = document.querySelectorAll('.slides');
     const slider = document.querySelector('#slider');
-    const lastSlideClone = slides[slides.length-1].cloneNode(true);
-    const oneBeforeLastSlideClone = slides[slides.length-2].cloneNode(true);
-    const firstSlideClone = slides[0].cloneNode(true);
-    const secoundSlideClone = slides[1].cloneNode(true);
+    const lastSlideClone = initSlides[initSlides.length-1].cloneNode(true);
+    const oneBeforeLastSlideClone = initSlides[initSlides.length-2].cloneNode(true);
+    const firstSlideClone = initSlides[0].cloneNode(true);
+    const secoundSlideClone = initSlides[1].cloneNode(true);
+    let sliderLength;
     const setSlidesClones = ()=>{
         slider.prepend(lastSlideClone);
         slider.prepend(oneBeforeLastSlideClone);
         slider.append(firstSlideClone);
         slider.append(secoundSlideClone);
-        //set activeSphere & update slides
+        //set activeSphere & update sliderLength
         lastSlideClone.classList.add('activeSphere');
-        slides = document.querySelectorAll('.slides');
+        sliderLength = document.querySelectorAll('#slider .slides').length;
     }
-    setSlidesClones();  
-
-
-
-
-
-
-
+    setSlidesClones(); 
 //SLIDER
     let shiftCounter= 0;
-    
-    const triggers = document.querySelectorAll('.slides .sphereContainer');
     const startMouseCoord = {
         'x':0,
         'y':0
@@ -35,14 +30,8 @@ window.onload = function(){
         'x':0,
         'y':0
     };
-
-    
-    
-
-
     const updateActiveStatus = ()=>{
-        for(slide of slides)
-            slide.classList.remove('activeSphere');
+        document.querySelector('.activeSphere').classList.remove('activeSphere');
         slides[shiftCounter+1].classList.add('activeSphere');
     };
     const setSliderTranslateY = ()=>{
@@ -53,98 +42,91 @@ window.onload = function(){
         const oneSlideWidth = slides[0].offsetWidth;
         slider.style.transform = `translateX(-${oneSlideWidth * shiftCounter}px) translateY(0px)`;
     };
+    const setTransition = ()=> slider.style.transition = '0.5s';
+    const removeTransition = ()=> slider.style.transition = 'none';
+    const sliderLoop = (end,direction)=>{
+        removeTransition();
+        shiftCounter = end;
+        direction == true ? setSliderTranslateX() : setSliderTranslateY();
+    }
     const horizontalMove=()=>{
-        //przeskok
-   
-        if(endMouseCoord.x < startMouseCoord.x && shiftCounter < triggers.length-3)
+        if(endMouseCoord.x < startMouseCoord.x && shiftCounter !== sliderLength-3){
             shiftCounter++;
-        else if(endMouseCoord.x > startMouseCoord.x && shiftCounter > 0)
+        }
+        else if(endMouseCoord.x < startMouseCoord.x && shiftCounter == sliderLength-3){
+            sliderLoop(1,true);
+            shiftCounter++;
+        }
+        else if(endMouseCoord.x > startMouseCoord.x && shiftCounter !== 0){
             shiftCounter--;
-
+        }
+        else if(endMouseCoord.x > startMouseCoord.x && shiftCounter == 0){
+            sliderLoop(sliderLength-4,true);
+            shiftCounter--;
+        }
         setSliderTranslateX();
+        setTransition();
         updateActiveStatus();
     };
     const verticalMove=()=>{
-        if(endMouseCoord.y < startMouseCoord.y && shiftCounter < triggers.length-3)
+        if(endMouseCoord.y < startMouseCoord.y && shiftCounter !== sliderLength-3){
             shiftCounter++;
-        else if(endMouseCoord.y > startMouseCoord.y && shiftCounter > 0)
+        }
+        else if(endMouseCoord.y < startMouseCoord.y && shiftCounter == sliderLength-3){
+            sliderLoop(1,false);
+            shiftCounter++;
+        }
+        else if(endMouseCoord.y > startMouseCoord.y && shiftCounter !== 0){
             shiftCounter--;
-
+        }
+        else if(endMouseCoord.y > startMouseCoord.y && shiftCounter == 0){
+            sliderLoop(sliderLength-4,false);
+            shiftCounter--;
+        }
         setSliderTranslateY();
+        setTransition();
         updateActiveStatus();
     };
     const checkMoveDirection = (evt)=>{
-        if(startMouseCoord.x !== evt.clientX && startMouseCoord.y !== evt.clientY){
+        if(startMouseCoord.x !== evt.clientX || startMouseCoord.y !== evt.clientY){
             if(evt.changedTouches){
                 endMouseCoord.x = evt.changedTouches[0].clientX;
                 endMouseCoord.y = evt.changedTouches[0].clientY;
-                document.removeEventListener('touchend',checkMoveDirection);
+                document.removeEventListener('touchend',checkMoveDirection,false);
             }else{
                 endMouseCoord.x = evt.clientX;
                 endMouseCoord.y = evt.clientY;
-                document.removeEventListener('mouseup',checkMoveDirection);
+                document.removeEventListener('mouseup',checkMoveDirection,false);
             }
             const sliderFlexDirect = window.getComputedStyle(slider).getPropertyValue('flex-direction');
             sliderFlexDirect == 'row' ? horizontalMove() : verticalMove();
-            
-            
         }  
     };
     const moveSlider = (evt)=>{
-        if(evt.target.matches(".linkIcons") == false){
+        if(evt.target.matches(".linkIcons") == false && evt.target.matches(".slides") == false && evt.target !== evt.currentTarget ){
             evt.preventDefault();
             if(evt.touches){
                 startMouseCoord.x = evt.touches[0].clientX;
                 startMouseCoord.y = evt.touches[0].clientY;
-                document.addEventListener('touchend',checkMoveDirection);
+                document.addEventListener('touchend',checkMoveDirection,false);
             }else{
                 startMouseCoord.x = evt.clientX;
                 startMouseCoord.y = evt.clientY;
-                document.addEventListener('mouseup',checkMoveDirection);
+                document.addEventListener('mouseup',checkMoveDirection,false);
             }
         }
         evt.stopPropagation();
     };
-    for(trigger of triggers){
-        trigger.addEventListener('mousedown',moveSlider);
-        trigger.addEventListener('touchstart',moveSlider);
-    }
-
-//ustawiam clony 
-//przy puszczenieniu 
-//sprawdzam 'shiftCounter'
-//jezeli jest rowny  1-> length-2, length-1 ->3
-// transition wylaczam 
-//ustawiam przesuniecie 
-//poruszam slider
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    slider.addEventListener('mousedown',moveSlider);
+    slider.addEventListener('touchstart',moveSlider);
 //STICKY MENUS  
-    const stickMenu = (obj)=> window.scrollY > window.innerHeight ? obj.style.position = 'fixed' : obj.style.position = 'static';
     const hamburger = document.querySelector('#hamburger');
     const mainMenu = document.querySelector('#menu');
-    window.addEventListener('scroll',()=>stickMenu(hamburger)); 
-    window.addEventListener('scroll',()=>stickMenu(mainMenu)); 
+    const stickMenu = obj=> window.scrollY >= window.innerHeight ? obj.style.position = 'fixed' : obj.style.position = 'static';
+    window.addEventListener('scroll',()=>{
+        stickMenu(hamburger);
+        stickMenu(mainMenu);
+    })
 //HAMBURGER TOGGLER
     const asideMenu = document.querySelector('#asideMenu');
     hamburger.addEventListener('click',function(){
@@ -155,16 +137,14 @@ window.onload = function(){
     const sphereMenuItems = document.querySelectorAll('.sphereMenuItem');
     const updateSideMenu = ()=>{
         const currentPage = Math.round(window.scrollY / window.innerHeight);
-        for (let i = 0; i < sphereMenuItems.length; i++) {
-            const item = sphereMenuItems[i];
-            currentPage == i ? item.classList.add('activeItem') : item.classList.remove('activeItem');
-        }
+        const currentActive = document.querySelector('.activeItem');
+        currentActive.classList.remove('activeItem');
+        sphereMenuItems[currentPage].classList.add('activeItem');
     }
-    window.addEventListener('scroll',updateSideMenu);
+    window.addEventListener('scroll',updateSideMenu,false);
 //RESIZER
     const sliderContainer = document.querySelector('#sliderContainer');
-    //const slider = document.querySelector('#slider');
-    //slides = document.querySelectorAll('.slides');
+    const slides = document.querySelectorAll('.slides');
     const slidesLength = slides.length;
     const sliderFlexDirect = window.getComputedStyle(slider).getPropertyValue('flex-direction');
     const setSlidesWidth = ()=>{
@@ -186,7 +166,6 @@ window.onload = function(){
 //VARIABLES    
     const canvas = document.querySelector("#canvasBck");
     const c = canvas.getContext("2d");
-    let starsArray = [];
 //STYLE
     const setCanvasDimensions = ()=>{
         canvas.width = window.innerWidth;
@@ -202,34 +181,11 @@ window.onload = function(){
             this.size = size;
             this.color = color;
         }
+        
         draw(){
-        ///ARMS    
-            c.beginPath();
-            c.moveTo(this.x,this.y);
-            c.lineTo(this.x+1*this.size,this.y-5*this.size);
-            c.lineTo(this.x+2*this.size,this.y);
-            c.lineTo(this.x+7*this.size,this.y+1*this.size);
-            c.lineTo(this.x+2*this.size,this.y+2*this.size);
-            c.lineTo(this.x+1*this.size,this.y+7*this.size);
-            c.lineTo(this.x+0,this.y+2*this.size);
-            c.lineTo(this.x-5*this.size,this.y+1*this.size);
-            c.lineTo(this.x,this.y);
-            c.fillStyle =  `rgba(${this.color},0.7)`;
-            c.fill();
-        //LARGE CIRCLE
-            c.beginPath();
-            c.arc(this.x+1*this.size,this.y+1*this.size,2.7*this.size,0,Math.PI*2,false);
-            c.fillStyle =  `rgba(${this.color},0.6)`;
-            c.fill();
-            c.shadowBlur = 10;
-            c.shadowColor = `rgb(${this.color})`;
-        //SMALL CIRCLE
-            c.beginPath();
-            c.arc(this.x+1*this.size,this.y+1*this.size,2.0*this.size,0,Math.PI*2,false);
-            c.fillStyle =  `rgba(${this.color},0.8)`;
-            c.fill();
-            c.shadowBlur = 10;
-            c.shadowColor = `rgb(${this.color})`;
+            const starImg = new Image();
+            starImg.src = './image/star.png';
+            c.drawImage(starImg, this.x, this.y,starImg.width*this.size,starImg.height*this.size);
         }
         update(){
             this.draw();
@@ -244,27 +200,28 @@ window.onload = function(){
         }
     }
 //CREATE STARS
-    let starsQuantity = 30;
-    const starsQuantityOnMobile = 20;
+    let starsArray = [];
+    let starsQuantity = 20;
+    const starsQuantityOnMobile = 15;
     function createStars(array){
-        window.innerWidth < 801 && window.innerHeight > window.innerWidth ? starsQuantity = starsQuantityOnMobile : starsQuantity = starsQuantity;
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        isMobileDevice() == true ? starsQuantity = starsQuantityOnMobile : starsQuantity = starsQuantity;
         for (let i = 0; i < starsQuantity; i++) {
-            const x = Math.random()*canvas.width;
-            const y = Math.random()*canvas.height;
-            const size = Math.random()*0.6;
+            const x = Math.random()*canvasWidth;
+            const y = Math.random()*canvasHeight;
+            const size = (Math.random()+1)*0.07;
             const color ='225,224,222';
-            const vx = Math.random()*0.2-0.1;
-            const vy = Math.random()*0.2-0.1;
+            const vx = Math.random()*0.3-0.15;
+            const vy = Math.random()*0.3-0.15;
             const star = new Star(x,y,size,color,vx,vy);
             array.push(star);
         }
     }
 //ANIMATION FUNCTION
-    function animation()
-    {
+    function animation(){
         requestAnimationFrame(animation);
         c.clearRect(0,0,innerWidth,innerHeight);
-        
         for(star of starsArray)
             star.update();
     }
