@@ -143,10 +143,10 @@ window.onload = function(){
     }
     window.addEventListener('scroll',updateSideMenu,false);
 //RESIZER
+    const sliderFlexDirect = window.getComputedStyle(slider).getPropertyValue('flex-direction');
     const sliderContainer = document.querySelector('#sliderContainer');
     const slides = document.querySelectorAll('.slides');
     const slidesLength = slides.length;
-    const sliderFlexDirect = window.getComputedStyle(slider).getPropertyValue('flex-direction');
     const setSlidesWidth = ()=>{
         slider.style.width = `${(sliderContainer.offsetWidth*slidesLength)/3}px`;
         slider.style.height = '100%';

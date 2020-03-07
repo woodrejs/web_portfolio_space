@@ -76,7 +76,6 @@ section{
         }
     }
     #social{
-        //flex: 6;
         width: 60vw;
         @include flex(row,flex-end,center);
         img{
@@ -255,11 +254,6 @@ section{
     }
     & >:nth-child(3){
         flex: 1;
-    }
-    &:hover{
-        #slider{
-            //animation: horizontalMove 2s 2s linear;
-        }
     }
 }
 #sliderContainer{
@@ -545,13 +539,6 @@ section{
     html{
         @include fluid-type(320px, 1920px, 8px, 22px);
     }
-    #projects{
-        &:hover{
-            #slider{
-                //animation: verticalMove 2s 2s linear;
-            }
-        }
-    }
 }
 @media (max-width: 768px) and (orientation: portrait){
     #hamburger{
@@ -685,6 +672,4 @@ section{
         display: block;
     }
 }
-*{
-    //border: 1px solid green;
-}
+
