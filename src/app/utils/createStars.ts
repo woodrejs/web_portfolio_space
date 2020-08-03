@@ -5,7 +5,7 @@ import GLOBAL from "../global/vars";
 
 const createStars = () => {
   const { canvas } = ELEMENTS;
-  const { starsQuantity, starsQuantityOnMobile } = GLOBAL;
+  let { starsQuantity, starsQuantityOnMobile } = GLOBAL;
   const array = [];
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;

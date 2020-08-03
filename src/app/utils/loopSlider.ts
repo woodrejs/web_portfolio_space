@@ -1,8 +1,11 @@
 import { setSliderTranslateX, setSliderTranslateY } from "./setSliderTranslate";
 import ELEMENTS from "../global/elements";
 
-const loopSlider = (direction) => {
-  const removeTransition = () => (ELEMENTS.slider.style.transition = "none");
+const loopSlider = (direction: boolean) => {
+  const removeTransition = () => {
+    if (ELEMENTS.slider)
+      return ((<HTMLElement>ELEMENTS.slider).style.transition = "none");
+  };
 
   removeTransition();
 

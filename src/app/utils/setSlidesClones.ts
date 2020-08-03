@@ -2,7 +2,7 @@ import ELEMENTS from "../global/elements";
 import GLOBAL from "../global/vars";
 
 const setSlidesClones = () => {
-  const { initSlides } = ELEMENTS;
+  const { initSlides, slider } = ELEMENTS;
   const LENGTH = initSlides.length;
   const firstSlideClone = initSlides[0].cloneNode(true);
   const secoundSlideClone = initSlides[1].cloneNode(true);
@@ -15,7 +15,7 @@ const setSlidesClones = () => {
   slider.append(secoundSlideClone);
 
   //set activeSphere
-  lastSlideClone.classList.add("activeSphere");
+  (lastSlideClone as HTMLDivElement).classList.add("activeSphere");
   ELEMENTS.slides = document.querySelectorAll(".slides");
   GLOBAL.length = document.querySelectorAll("#slider .slides").length;
 };
