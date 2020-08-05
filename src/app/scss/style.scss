@@ -144,7 +144,7 @@ section {
 //hero
 #hero {
   @include flex(column, stretch, stretch);
-  //background-image: url("../image/orbits.svg");
+  background-image: url("../../assets/image/orbits.svg");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -418,10 +418,10 @@ section {
       transform: scale(1.3);
     }
     & :nth-child(1) {
-      //background-image: url("../icons/gitHub_black_icon.svg");
+      background-image: url("../../assets/icons/gitHub_black_icon.svg");
     }
     & :nth-child(2) {
-      //background-image: url("../icons/web_icon.svg");
+      background-image: url("../../assets/icons/web_icon.svg");
     }
   }
 }

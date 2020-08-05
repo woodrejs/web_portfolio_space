@@ -1,6 +1,7 @@
 import image from "../../assets/image/star.png";
+import { Stars } from "../ts/types";
 
-export default class Star {
+export default class Star implements Stars {
   constructor(
     public canvas: HTMLCanvasElement,
     public x: number,
@@ -9,7 +10,7 @@ export default class Star {
     public color: string,
     public vx: number,
     public vy: number,
-    public img: any = image,
+    public img: ImageData = image,
     public c: CanvasRenderingContext2D | null = canvas.getContext("2d")
   ) {}
 

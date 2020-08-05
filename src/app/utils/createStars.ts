@@ -2,11 +2,12 @@ import Star from "../class/Star";
 import isMobileDevice from "./isMobileDevice";
 import ELEMENTS from "../global/elements";
 import GLOBAL from "../global/vars";
+import { Stars } from "../ts/types";
 
 const createStars = () => {
   const { canvas } = ELEMENTS;
   let { starsQuantity, starsQuantityOnMobile } = GLOBAL;
-  const array = [];
+  const array: Stars[] = [];
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
   const color = "225,224,222";

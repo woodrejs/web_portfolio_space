@@ -3,7 +3,6 @@ import checkMoveDirection from "./checkMoveDirection";
 
 const moveSlider = (e: MouseEvent | TouchEvent) => {
   if ("changedTouches" in e) {
-    // changedTouches instanceof e?????}
     if (
       (e.touches[0].target as HTMLElement).matches(".linkIcons") == false &&
       (e.touches[0].target as HTMLElement).matches(".slides") == false &&

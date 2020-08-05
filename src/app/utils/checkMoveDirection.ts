@@ -8,7 +8,6 @@ const checkMoveDirection = (e: MouseEvent | TouchEvent): void => {
   const { startMouseCoord, endMouseCoord } = GLOBAL;
 
   if ("changedTouches" in e) {
-    // changedTouches instanceof e?????
     const touchX = e.changedTouches[0].clientX;
     const touchY = e.changedTouches[0].clientY;
 
